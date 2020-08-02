@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rbac-sample-clusterrolebinding
+subjects:
+- kind: ServiceAccount
+  name: rbac-sample-sa
+  namespace: rbac-sample-ns
+roleRef:
+  kind: ClusterRole
+  name: rbac-sample-clusterrole
+  apiGroup: rbac.authorization.k8s.io
