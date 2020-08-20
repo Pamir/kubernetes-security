@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: user2-busy
+  name: user2-busy
+spec:
+  nodeSelector:
+    run: "true"
+  securityContext:
+    runAsUser: 2002
+    fsGroup: 3002
+  containers:
+  - command:
+    - /bin/sh
+    - -c 
+    - "cat /security/creds && sleep 9999" 
+    image: busybox
+    name: user1-busy
+    volumeMounts:
+    - name:  secure-volume
+      mountPath:  /security
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+  volumes:
+  - name:  secure-volume
+    hostPath:
+      path: /var/logs/security 
+      
