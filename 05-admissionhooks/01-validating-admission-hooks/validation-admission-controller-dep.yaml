@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: label-admission-controller
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    run: label-admission-controller
+status:
+  loadBalancer: {}
+---
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: label-admission-controller
+  name: label-admission-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: label-admission-controller
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        run: label-admission-controller
+    spec:
+      containers:
+      - image: pamir/k8s-label-admission-controller:0.0.1
+        imagePullPolicy: Always
+        name: label-admission-controller
+        volumeMounts:
+        - mountPath: /tls
+          name: label-admission-controller-tls
+        ports:
+        - containerPort: 443
+        resources: {}
+      volumes:
+      - name: label-admission-controller-tls
+        secret:
+          secretName: label-admission-controller-tls
